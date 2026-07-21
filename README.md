@@ -4,7 +4,7 @@
 
 Notes are classified against a single source of truth, linked with *typed* edges (`analyzes::`, `supports::`, `peer::`), and validated by script. The same ontology that constrains writing is what makes reading precise.
 
-https://github.com/user-attachments/assets/REPLACE_AFTER_UPLOAD
+https://github.com/user-attachments/assets/087006cd-fdc7-47d1-bc26-399db4821cd9
 
 ---
 
