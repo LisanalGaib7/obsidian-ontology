@@ -1,0 +1,21 @@
+# Personal vault data must never be committed to this template repo.
+# Only examples/sample-vault/ is tracked.
+/vault/
+*.private.json
+config/ontology.local.json
+
+# Obsidian workspace state
+.obsidian/workspace*
+.obsidian/plugins/*/data.json
+.trash/
+
+# n8n / pipeline exports may embed credentials - keep them out
+*workflow*.json
+!config/ontology.json
+.env
+.env.*
+
+# OS / editor
+Thumbs.db
+.DS_Store
+*.swp

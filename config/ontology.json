@@ -1,0 +1,59 @@
+{
+  "_note": "SSOT for the whole system. Scripts and the ingestion pipeline read this file at RUNTIME (fs.readFileSync / Get-Content), so editing this file is the only step needed to change the ontology - no code edits, no regeneration, no redeploy.",
+
+  "_domains": "Top-level context buckets. A note belongs to exactly one. Relation vocabularies are keyed off this (see validRelationTypes).",
+  "validDomains": ["invest", "biz", "career", "general"],
+
+  "_sectors": "Entity attribute: coarse classification. Replace with whatever axis matters in your domain (e.g. Department, Team, Discipline).",
+  "validSectors": ["Energy", "Tech", "Health", "Defense", "Space", "Finance", "Consumer", "Materials", "Industrials", "Macro", "Other"],
+
+  "_industries": "Nested attribute: each sector allows only its own list. The validator rejects an industry that does not belong to the note's sector - this is what stops taxonomy drift.",
+  "validIndustries": {
+    "Energy":      ["Oil/Gas", "Storage", "Solar", "Wind", "Nuclear", "Coal", "Fertilizer", "Fuel Cell"],
+    "Tech":        ["Semiconductor", "Power Semiconductor", "AI Software", "Robotics", "Optical"],
+    "Health":      ["Healthcare", "Biotech", "Cosmetics"],
+    "Defense":     ["Defense"],
+    "Space":       ["Aerospace"],
+    "Finance":     ["Finance"],
+    "Consumer":    ["Food & Beverage"],
+    "Materials":   ["Battery", "Steel", "Chemicals"],
+    "Industrials": ["Shipbuilding", "Machinery", "Construction"],
+    "Macro":       ["Macro", "Geopolitics"],
+    "Other":       []
+  },
+
+  "_sources": "Provenance of a note. Keeping this closed-vocabulary makes 'where did this claim come from' answerable by query instead of by memory.",
+  "validSources": ["telegram", "blog", "report", "paper", "youtube", "twitter", "article", "linkedin", "web", "llm", "self"],
+
+  "_relations": "Typed edges, bucketed by domain. This is the core of the ontology: a link is not just [[Note]], it is `analyzes:: [[Note]]`. The validator rejects a relation type that is not allowed for the note's domain. 'related' is the deliberate fallback in every bucket.",
+  "validRelationTypes": {
+    "invest":  ["hub", "analyzes", "basis", "supports", "peer", "holding", "related"],
+    "biz":     ["hub", "related", "project", "spec"],
+    "default": ["hub", "related"]
+  },
+
+  "_aliasNote": "Entity resolution. The ingestion pipeline reads this at runtime and rewrites relation targets from alias to canonical form, so [[Nvidia]] and [[NVIDIA]] cannot split into separate graph nodes. Exact-match only (never substring). Adding an alias is a one-line edit here - no pipeline change.",
+  "aliases": {
+    "TICKER_A": ["Company A", "CompanyA", "company a"],
+    "TICKER_B": ["Company B", "CompanyB"],
+    "Energy": ["energy", "Power"],
+    "World Model": ["world model", "World-Model"],
+    "On-Prem AI": ["on-prem AI", "OnPrem AI", "on premise AI"]
+  },
+
+  "_hubs": "Graph entry points. Each hub is a note in 000_Maps/ that a retrieval agent enters first, then traverses typed edges outward. Keep this small - hubs are doorways, not tags.",
+  "hubList": [
+    "AI", "Energy", "Storage", "TICKER_A", "TICKER_B", "On-Prem AI",
+    "Finance", "Technical Analysis", "Macro", "Semiconductor", "Power Semiconductor",
+    "Defense", "Consumer", "Space", "Nuclear", "Commodities", "Shipbuilding",
+    "Ontology", "SQL", "Prompting", "Robotics"
+  ],
+
+  "_folderMap": "para_type -> destination folder. The ingestion pipeline uses this to decide where a generated note lands; the validator uses it to flag notes sitting in the wrong folder.",
+  "folderMap": {
+    "project":  "1_Projects",
+    "area":     "2_Areas",
+    "resource": "3_Resources",
+    "zk":       "5_Zettelkasten"
+  }
+}
