@@ -27,27 +27,29 @@ Two directions, one ontology:
 | **Write** (capture, classify) | Constrains what can be created | Grounding context — schema enforcement |
 | **Read** (review, query) | Traverses typed edges from hub nodes | Ontology-based Graph RAG |
 
+**Legend:** — solid = data flow &nbsp;&nbsp; ┄┄ dashed = governance / schema
+
 ```mermaid
 flowchart TB
     CFG[("config/ontology.json<br/>SSOT = the schema")]
     V[("Obsidian Vault<br/>typed notes + relations")]
 
-    subgraph WRITE["Write — Grounding Context"]
+    subgraph WRITE["WRITE — Grounding Context"]
         direction LR
-        I["Capture<br/>(manual or automated)"] --> C["Classify<br/>+ validate at write time"]
+        I["Capture<br/>(chat, email, clipper...)"] --> C["Classify<br/>agent / script"]
     end
 
-    subgraph READ["Read — Ontology-based Graph RAG"]
+    subgraph READ["READ — Ontology-based Graph RAG"]
         direction LR
-        Q["Agent<br/>hub entry -> edge traversal"]
+        Q["Agent<br/>hub entry → edge traversal"]
     end
 
-    CFG -. schema injection .-> C
-    C ==> V
-    V ==> Q
-    Q -. "traversal (hub / analyzes / supports / peer)" .-> V
-    CFG -. validate .-> VAL["scripts/validate-vault.ps1"]
-    VAL -. report .-> V
+    CFG -. "schema injection" .-> C
+    C == "typed write" ==> V
+    CFG -. "validate" .-> VAL["scripts/validate-vault.ps1"]
+    VAL -. "apply" .-> V
+    V == "grounded read" ==> Q
+    Q -. "relation traversal<br/>(hub / analyzes / supports / peer)" .-> V
 ```
 
 **This is not vector RAG.** No embeddings, no similarity search. Retrieval is symbolic: enter at a hub, walk typed edges, filter on frontmatter. For a curated vault this is more precise than cosine distance — and it can answer questions embeddings cannot, such as *"every note that `supports::` this thesis but was written before that date."*
