@@ -178,4 +178,4 @@ None of these hurt at single-vault scale. All of them start to hurt once several
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Published for portfolio purposes. All rights reserved — no reuse, modification, or redistribution license is granted. See [LICENSE](LICENSE).
