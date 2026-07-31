@@ -169,7 +169,7 @@ Allowed relation types are per-domain (see `validRelationTypes`), so an `invest`
 **Known gaps**, kept honest:
 
 - **Entity types are not declared.** `para_type` is a workflow bucket, not an entity type; the real entity typing sits implicitly in the hub list (companies, sectors, concepts, and projects all share one flat namespace). A `hub_type` field would fix this.
-- **Relation range is unconstrained.** Relation *names* are validated per domain; relation *targets* are not checked against the hub registry.
+- **Relation range is unconstrained.** Relation *names* are validated per domain; relation *targets* are not checked against the hub registry. *(Solved in the production vault this sample is drawn from — a `hub::` target is checked against the actual hub list — not yet ported back to this repo.)*
 - **No cardinality rules.** Nothing enforces "at most N hubs per note."
 
 None of these hurt at single-vault scale. All of them start to hurt once several agents write into the same graph.
